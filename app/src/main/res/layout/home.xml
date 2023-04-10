@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_blue_bg"
+    android:gravity="center|top">
+
+    <TextView
+        android:id="@+id/greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:color="@color/white"
+        android:textSize="30sp"
+        android:layout_marginTop="80dp"
+        android:text="Welcome"
+        />
+    <ImageView
+        android:id="@+id/home_image"
+        android:src="@drawable/home_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/textv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:color="@color/white"
+        android:textSize="20sp"
+        android:text="What would you like to do?"
+        android:layout_marginTop="10dp"
+        />
+    <Button
+        android:id="@+id/bookAppointment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/my_custom_button"
+        android:layout_marginTop="30dp"
+        android:text="Book Appointment"
+        android:padding="8dp"
+        />
+
+
+    <Button
+        android:id="@+id/cancelAppointment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/my_custom_button"
+        android:layout_marginTop="15dp"
+        android:text="Cancel appointment"
+        android:padding="8dp"
+        />
+    <Button
+        android:id="@+id/editProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/my_custom_button"
+        android:layout_marginTop="15dp"
+        android:text="Edit your profile"
+        android:padding="8dp"
+        />
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true">
+
+
+        <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/cancellation_button"
+        android:padding="8dp"
+        android:text="Logout" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

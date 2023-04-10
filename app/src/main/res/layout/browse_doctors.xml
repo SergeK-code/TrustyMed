@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_blue_bg">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Let's find you a doctor"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+
+        />
+
+
+    <TextView
+        android:id="@+id/chooseS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a specialty"
+        android:textSize="20sp"
+        android:layout_gravity="left"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+        />
+
+    <Spinner
+        android:id="@+id/specialty"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="15dp"
+        android:minHeight="48dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/noDoctors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="No doctors to show"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/grey"
+        android:visibility="gone"
+        />
+    <ListView
+        android:id="@+id/doctors"
+        android:layout_width="match_parent"
+        android:layout_height="355dp"
+        android:padding="20dp" />
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="2dp"
+          >
+
+
+            <Button
+                android:id="@+id/home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/my_custom_button"
+                android:padding="8dp"
+                android:text="Go home" />
+        </LinearLayout>
+    </RelativeLayout>>
+
+</LinearLayout>
