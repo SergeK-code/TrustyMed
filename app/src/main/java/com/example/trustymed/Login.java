@@ -43,13 +43,10 @@ public class Login extends AppCompatActivity {
         ViewCompat.setBackgroundTintList(register, null);
 
 
-
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.blue)));
         assert actionBar != null;
         actionBar.hide();
-
-
 
 
         login.setOnClickListener(new View.OnClickListener(){
