@@ -240,7 +240,7 @@ public class EditProfile extends Activity {
             }
 
             for(Patient patient : patients){
-                if(email.getText().toString().trim().equals(patient.getEmail())){ //&& patient.getId()!=currPatient.getId()){
+                if(email.getText().toString().trim().equals(patient.getEmail()) && patient.getId()!=currPatient.getId()){
                     String t = error.getText().toString();
                     error.setText(t+"\nEmail already taken");
                     error.setVisibility(View.VISIBLE);
