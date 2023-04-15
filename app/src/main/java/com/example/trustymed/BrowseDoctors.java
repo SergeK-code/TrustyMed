@@ -36,17 +36,10 @@ public class BrowseDoctors extends Activity {
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.browse_doctors);
-
-        patient = (Patient) getIntent().getSerializableExtra("patient");
-
-        specialtiesList = findViewById(R.id.specialty);
-        doctorsList = findViewById(R.id.doctors);
-        home= findViewById(R.id.home);
-        noDoctors=findViewById(R.id.noDoctors);
+        initViews();
 
         s = new GetSpecialties(BrowseDoctors.this);
         d = new GetDoctors(BrowseDoctors.this);
-
         try {
             specialties= s.execute().get();
             doctors=d.execute().get();
@@ -54,30 +47,17 @@ public class BrowseDoctors extends Activity {
             e.printStackTrace();
         }
 
-        specialty_adapter = new ArrayAdapter<Specialty>(this, android.R.layout.simple_spinner_item,specialties);
-        specialty_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        specialtiesList.setAdapter(specialty_adapter);
+        patient = (Patient) getIntent().getSerializableExtra("patient");
+
+        listOfSpecialties();
 
         specialtiesList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                         selectedSpecialty = (Specialty) parent.getAdapter().getItem(position);
-                        int choice = selectedSpecialty.getId();
-                        doctorsSelected.clear();
+                        int specialtyId = selectedSpecialty.getId();
 
-                        for (Doctor D : doctors) {
-                            if (D.getSpeciality_id() == choice)
-                                doctorsSelected.add(D);
-                        }
-                        if(doctorsSelected.size()<=0){
-                            doctorsList.setVisibility(View.GONE);
-                            noDoctors.setVisibility(View.VISIBLE);
-                        }
-                        else{
-                            doctorsList.setVisibility(View.VISIBLE);
-                            noDoctors.setVisibility(View.GONE);
-                        }
-                        doctorAdapter.notifyDataSetChanged();
+                        listOfDoctors(specialtyId);
                     }
 
                     @Override
@@ -87,20 +67,16 @@ public class BrowseDoctors extends Activity {
                 });
 
         doctorAdapter = new DoctorAdapter(this, doctorsSelected,specialties);
-       doctorsList.setAdapter(doctorAdapter);
-
+        doctorsList.setAdapter(doctorAdapter);
 
         doctorsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedDoctor = (Doctor) parent.getAdapter().getItem(position);
-                Intent i = new Intent(BrowseDoctors.this, DoctorDetails.class);
-                i.putExtra("selectedDoctor", selectedDoctor);
-                i.putExtra("patient", patient);
-                i.putExtra("specialty", selectedSpecialty.getName());
-                startActivityForResult(i, 1);
+                displayDoctorDetails();
                     }
                 });
+
         home.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -123,5 +99,47 @@ public class BrowseDoctors extends Activity {
                     }
             }
 
+    }
+
+    private void initViews(){
+        specialtiesList = findViewById(R.id.specialty);
+        doctorsList = findViewById(R.id.doctors);
+        home= findViewById(R.id.home);
+        noDoctors=findViewById(R.id.noDoctors);
+    }
+
+    private void listOfSpecialties(){
+
+        specialty_adapter = new ArrayAdapter<Specialty>(this, android.R.layout.simple_spinner_item,specialties);
+        specialty_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        specialtiesList.setAdapter(specialty_adapter);
+    }
+
+    private void listOfDoctors(int specialtyId){
+
+
+        doctorsSelected.clear();
+
+        for (Doctor D : doctors) {
+            if (D.getSpeciality_id() == specialtyId)
+                doctorsSelected.add(D);
+        }
+        if(doctorsSelected.size()<=0){
+            doctorsList.setVisibility(View.GONE);
+            noDoctors.setVisibility(View.VISIBLE);
+        }
+        else{
+            doctorsList.setVisibility(View.VISIBLE);
+            noDoctors.setVisibility(View.GONE);
+        }
+        doctorAdapter.notifyDataSetChanged();
+    }
+
+    private void displayDoctorDetails(){
+        Intent i = new Intent(BrowseDoctors.this, DoctorDetails.class);
+        i.putExtra("selectedDoctor", selectedDoctor);
+        i.putExtra("patient", patient);
+        i.putExtra("specialty", selectedSpecialty.getName());
+        startActivityForResult(i, 1);
     }
 }

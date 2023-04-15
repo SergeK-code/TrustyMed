@@ -24,8 +24,9 @@ public class Home extends Activity {
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.home);
-        bundle= getIntent().getExtras();
+        initViews();
 
+        bundle= getIntent().getExtras();
         patient = (Patient) getIntent().getSerializableExtra("patient");
         password = bundle.getString("password");
 
@@ -35,17 +36,10 @@ public class Home extends Activity {
         editor.putString("password", password);
         editor.apply();
 
-        bookAppointment= findViewById(R.id.bookAppointment);
-        cancelAppointment= findViewById(R.id.cancelAppointment);
-        editProfile= findViewById(R.id.editProfile);
-        logout=findViewById(R.id.logout);
-        greeting= findViewById(R.id.greeting);
         ViewCompat.setBackgroundTintList(bookAppointment, null);
         ViewCompat.setBackgroundTintList(cancelAppointment, null);
         ViewCompat.setBackgroundTintList(editProfile, null);
         ViewCompat.setBackgroundTintList(logout, null);
-
-
 
         if(patient!=null){
             String text="Welcome "+patient.getFirst_name();
@@ -55,42 +49,28 @@ public class Home extends Activity {
         bookAppointment.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent i = new Intent(Home.this,BrowseDoctors.class);
-                i.putExtra("patient",patient);
-                startActivity(i);
+                displayBrowseDoctors(patient);
             }
         });
 
         cancelAppointment.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent i = new Intent(Home.this, CancelAppointment.class);
-                i.putExtra("patient",patient);
-                startActivity(i);
+                displayCancelAppointment(patient);
             }
         });
 
         editProfile.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent i = new Intent(Home.this,EditProfile.class);
-                i.putExtra("patient",patient);
-                startActivityForResult(i,3);
+                displayEditProfile(patient);
             }
         });
 
         logout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                SharedPreferences preferences = getSharedPreferences("account", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove("email");
-                editor.remove("password");
-                editor.apply();
-
-                Intent i = new Intent(Home.this, Login.class);
-                Toast.makeText(Home.this,"Logged out",Toast.LENGTH_SHORT).show();
-                startActivity(i);
+                Logout();
             }
         });
 
@@ -108,4 +88,43 @@ public class Home extends Activity {
                 }
         }
     }
+
+    private void initViews(){
+        bookAppointment= findViewById(R.id.bookAppointment);
+        cancelAppointment= findViewById(R.id.cancelAppointment);
+        editProfile= findViewById(R.id.editProfile);
+        logout=findViewById(R.id.logout);
+        greeting= findViewById(R.id.greeting);
+    }
+
+    private void displayBrowseDoctors(Patient patient){
+        Intent i = new Intent(Home.this,BrowseDoctors.class);
+        i.putExtra("patient",patient);
+        startActivity(i);
+    }
+
+    private void displayCancelAppointment(Patient patient){
+        Intent i = new Intent(Home.this, CancelAppointment.class);
+        i.putExtra("patient",patient);
+        startActivity(i);
+    }
+
+    private void displayEditProfile(Patient patient){
+        Intent i = new Intent(Home.this,EditProfile.class);
+        i.putExtra("patient",patient);
+        startActivityForResult(i,3);
+    }
+
+    private void Logout(){
+        SharedPreferences preferences = getSharedPreferences("account", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("email");
+        editor.remove("password");
+        editor.apply();
+
+        Intent i = new Intent(Home.this, Login.class);
+        Toast.makeText(Home.this,"Logged out",Toast.LENGTH_SHORT).show();
+        startActivity(i);
+    }
+
 }

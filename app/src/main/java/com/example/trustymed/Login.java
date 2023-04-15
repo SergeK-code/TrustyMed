@@ -46,6 +46,7 @@ public class Login extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.blue)));
+        assert actionBar != null;
         actionBar.hide();
 
 
@@ -78,10 +79,8 @@ public class Login extends AppCompatActivity {
                                 error.setVisibility(View.GONE);
                             }
                             found = true;
-                            Intent i = new Intent(Login.this, Home.class);
-                            i.putExtra("patient", p);
-                            i.putExtra("password",password.getText().toString().trim());
-                            startActivity(i);
+                            displayHome(p);
+                            break;
                         }
                     }
                     if (found == false) {
@@ -111,5 +110,12 @@ public class Login extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    private void displayHome(Patient p){
+        Intent i = new Intent(Login.this, Home.class);
+        i.putExtra("patient", p);
+        i.putExtra("password",password.getText().toString().trim());
+        startActivity(i);
     }
 }

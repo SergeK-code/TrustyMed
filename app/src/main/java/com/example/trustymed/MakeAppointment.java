@@ -45,31 +45,17 @@ public class MakeAppointment extends Activity {
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.make_appointment);
+        initViews();
 
         bundle = getIntent().getExtras();
-        title= findViewById(R.id.title);
-        datePicker= findViewById(R.id.datePicker);
-        timeSpinner=findViewById(R.id.timeSpinner);
-        paymentSpinner=findViewById(R.id.paymentSpinner);
-        confirm= findViewById(R.id.confirm);
-        home= findViewById(R.id.home);
-        back= findViewById(R.id.back);
+
         doctor_name= bundle.getString("doctor_name");
         doctor_id= bundle.getInt("doctor_id");
         consultation_cost= bundle.getInt("consultation_cost");
         patient_id= bundle.getInt("patient_id");
         title.setText("Book an appointment with\nDoctor "+doctor_name);
 
-        tomorrow = Calendar.getInstance();
-        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
-        datePicker.setMinDate(tomorrow.getTimeInMillis());
-        sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false); // to avoid unexpected parsing behavior
-        selectedDate = sdf.format(tomorrow.getTime()).trim();
-
-        timeAdapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,hours);
-        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timeSpinner.setAdapter(timeAdapter);
+        selectedDate = initCalendar();
 
         today = Calendar.getInstance();
         today.setTimeInMillis(System.currentTimeMillis());
@@ -85,11 +71,11 @@ public class MakeAppointment extends Activity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(yearv, monthv - 1, day); // Subtract 1 to get 0-based month index
 
-
                 selectedDate = sdf.format(calendar.getTime()).trim();
             }
         });
 
+        listOfTime();
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -103,21 +89,14 @@ public class MakeAppointment extends Activity {
             }
         });
 
-
         getPaymentTypes= new GetPaymentTypes(this);
         try {
             paymentType= getPaymentTypes.execute().get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-
-            paymentAdapter= new ArrayAdapter<PaymentType>(this,android.R.layout.simple_spinner_item,paymentType);
-            paymentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            paymentSpinner.setAdapter(paymentAdapter);
-
-            paymentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listOfPaymentTypes();
+        paymentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     PaymentType payment= (PaymentType) parent.getAdapter().getItem(position);
@@ -133,11 +112,9 @@ public class MakeAppointment extends Activity {
 
 
 
-
         confirm.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
                 currentAppointments= new GetAppointments(MakeAppointment.this);
                 try {
                     currentAppointmentsList= currentAppointments.execute().get();
@@ -145,33 +122,7 @@ public class MakeAppointment extends Activity {
                     e.printStackTrace();
                 }
 
-                    for(Appointment a : currentAppointmentsList){
-                        if(doctor_id==a.getDoctor_id() && Objects.equals(a.getDate(), selectedDate) && Objects.equals(a.getTime(), selectedTime)){
-                            taken=true;
-                            break;
-                        }
-                    }
-                    if(taken==true){
-                        String message="Sorry this appointment is already booked";
-                        recreate();
-                        Toast.makeText(MakeAppointment.this,message,Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-
-                        setAppointment = new SetAppointment(MakeAppointment.this,selectedDate, selectedTime, consultation_cost, patient_id, doctor_id, selectedPaymentTypeId);
-                        try {
-                            response= setAppointment.execute().get();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if(response!=null) {
-                            Toast.makeText(MakeAppointment.this, response, Toast.LENGTH_SHORT).show();
-                        }
-                        setResult(3);
-                        finish();
-                    }
+                bookAppointment();
 
                 }
         });
@@ -191,5 +142,68 @@ public class MakeAppointment extends Activity {
             }
         });
 
+    }
+
+    private void initViews(){
+        title= findViewById(R.id.title);
+        datePicker= findViewById(R.id.datePicker);
+        timeSpinner=findViewById(R.id.timeSpinner);
+        paymentSpinner=findViewById(R.id.paymentSpinner);
+        confirm= findViewById(R.id.confirm);
+        home= findViewById(R.id.home);
+        back= findViewById(R.id.back);
+    }
+
+    private String initCalendar(){
+        tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        datePicker.setMinDate(tomorrow.getTimeInMillis());
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false); // to avoid unexpected parsing behavior
+        return sdf.format(tomorrow.getTime()).trim();
+    }
+
+    private void listOfTime(){
+        timeAdapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,hours);
+        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeSpinner.setAdapter(timeAdapter);
+    }
+
+    private void listOfPaymentTypes(){
+
+        paymentAdapter= new ArrayAdapter<PaymentType>(this,android.R.layout.simple_spinner_item,paymentType);
+        paymentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        paymentSpinner.setAdapter(paymentAdapter);
+    }
+
+    private void bookAppointment(){
+
+        for(Appointment a : currentAppointmentsList){
+            if(doctor_id==a.getDoctor_id() && Objects.equals(a.getDate(), selectedDate) && Objects.equals(a.getTime(), selectedTime)){
+                taken=true;
+                break;
+            }
+        }
+        if(taken==true){
+            String message="Sorry this appointment is already booked";
+            recreate();
+            Toast.makeText(MakeAppointment.this,message,Toast.LENGTH_SHORT).show();
+        }
+        else {
+
+            setAppointment = new SetAppointment(MakeAppointment.this,selectedDate, selectedTime, consultation_cost, patient_id, doctor_id, selectedPaymentTypeId);
+            try {
+                response= setAppointment.execute().get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(response!=null) {
+                Toast.makeText(MakeAppointment.this, response, Toast.LENGTH_SHORT).show();
+            }
+            setResult(3);
+            finish();
+        }
     }
 }
