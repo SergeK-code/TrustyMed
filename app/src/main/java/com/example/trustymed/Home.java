@@ -83,8 +83,8 @@ public class Home extends Activity {
                     case 2:
                         Intent i = new Intent(Home.this,Login.class);
                         startActivity(i);
-                    case 1:
-                        //do nothing
+                    default:
+                        Toast.makeText(Home.this,"No changes were made",Toast.LENGTH_SHORT).show();
                 }
         }
     }

@@ -120,7 +120,6 @@ public class EditProfile extends Activity {
             @Override
             public void onClick(View v) {
                 setResult(1);
-                Toast.makeText(EditProfile.this,"No changes were made",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
