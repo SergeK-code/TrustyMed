@@ -71,13 +71,22 @@
             android:layout_height="fill_parent">
 
             <TextView
+                android:id="@+id/doctorBio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="15sp"
+                android:layout_gravity="center"/>
+
+            <TextView
                 android:id="@+id/workingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/workingTime"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:textSize="15sp"
                 android:layout_gravity="center"/>
+
 
             <TextView
                 android:id="@+id/availability"

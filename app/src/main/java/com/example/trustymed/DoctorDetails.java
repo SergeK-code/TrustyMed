@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,7 @@ import java.util.concurrent.ExecutionException;
 public class DoctorDetails extends Activity {
     private NestedScrollView scrollView;
     private ImageView doctorImage;
-    private TextView doctorName,doctorSpecialty,doctorRating,doctorPhone;
+    private TextView doctorName,doctorSpecialty,doctorRating,doctorPhone,doctorConsultationCost,doctorBio;
     private DatePicker datePicker;
     private GridView hoursGrid;
     private Button book,home,back;
@@ -69,6 +71,8 @@ public class DoctorDetails extends Activity {
         String rating = String.valueOf(selectedDoctor.getRating());
         doctorRating.setText("Rating: "+rating);
         doctorPhone.setText("Phone: "+selectedDoctor.getPhone());
+        doctorConsultationCost.setText("Consultation: "+selectedDoctor.getConsultation_cost()+"$");
+        doctorBio.setText(selectedDoctor.getBio());
 
         String todayDate = initCalendar();
         checkAvailability(todayDate);
@@ -93,6 +97,15 @@ public class DoctorDetails extends Activity {
                 checkAvailability(date);
                 hoursGrid_adapter.notifyDataSetChanged();
 
+            }
+        });
+
+        hoursGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Scroll to the bottom of the page
+                NestedScrollView scrollView = findViewById(R.id.scrollView);
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
 
@@ -147,6 +160,8 @@ public class DoctorDetails extends Activity {
         doctorSpecialty= findViewById(R.id.doctorSpecialty);
         doctorRating= findViewById(R.id.doctorRating);
         doctorPhone= findViewById(R.id.doctorPhone);
+        doctorConsultationCost= findViewById(R.id.doctorConsultationCost);
+        doctorBio = findViewById(R.id.doctorBio);
         datePicker= findViewById(R.id.datePicker);
         hoursGrid= findViewById(R.id.hours);
         book= findViewById(R.id.book);
