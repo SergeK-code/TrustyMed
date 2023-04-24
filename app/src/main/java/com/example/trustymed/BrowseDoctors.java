@@ -47,7 +47,7 @@ public class BrowseDoctors extends Activity {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        Log.e("doctors",doctors.toString());
+
 
         patient = (Patient) getIntent().getSerializableExtra("patient");
 

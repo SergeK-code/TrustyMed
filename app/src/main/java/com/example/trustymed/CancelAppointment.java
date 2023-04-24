@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 
 public class CancelAppointment extends Activity{
     private ListView appointmentsList;
-    CancelAppointmentAdapter cancelAppointmentAdapter;
+    private CancelAppointmentAdapter cancelAppointmentAdapter;
     private Patient p;
     private int patient_id;
     private ArrayList<Appointment> appointments,myAppointments= new ArrayList<>();
